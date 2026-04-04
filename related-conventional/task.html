@@ -105,11 +105,11 @@
       // Added fixation_trial to the beginning of the timeline sequence
       timeline: [fixation_trial, mask_trial, prime_trial, target_trial],
       timeline_variables: [
-        { prime: 'doctor', target: 'NURSE', correct_key: 'f' },
-        { prime: 'apple', target: 'FLIRB', correct_key: 'j' },
-        { prime: 'bread', target: 'BUTTER', correct_key: 'f' },
-        { prime: 'water', target: 'CHALK', correct_key: 'f' },
-        { prime: 'cloud', target: 'MOKIR', correct_key: 'j' }
+        { prime: 'doctor', target: 'NURSE', correct_key: 'f', word_prime: true },
+        { prime: 'apple', target: 'FLIRB', correct_key: 'j', word_prime: false},
+        { prime: 'bread', target: 'BUTTER', correct_key: 'f', word_prime: false },
+        { prime: 'water', target: 'CHALK', correct_key: 'f', word_prime: false },
+        { prime: 'cloud', target: 'MOKIR', correct_key: 'j', word_prime: false }
       ],
       randomize_order: true
     };
