@@ -24,19 +24,24 @@
         font-size: 18px;
         font-family: sans-serif;
         color: #888;
-        z-index: 100;
+        z-index: 9999; /* Higher z-index ensures it stays above masks and stimuli */
+        background-color: white; /* Prevents background elements from bleeding through */
+        padding: 5px;
       }
     </style>
   </head>
-  <body></body>
+  <body>
+    <div id="trial-counter-container"></div>
+  </body>
   <script>
     const jsPsych = initJsPsych();
 
     const subject_id = jsPsych.randomization.randomID(10);
     const filename = `${subject_id}.csv`;
-    
+
     let trial_count = 191; 
 
+    // Helper to update the counter text
     function updateCounter() {
       const counterEl = document.getElementById('trial-counter-container');
       if (counterEl) {
@@ -87,6 +92,7 @@
       stimulus: generateMask, 
       choices: "NO_KEYS",      
       trial_duration: 500
+      // Counter remains visible because it is a fixed HTML element
     };
 
     const prime_trial = {
@@ -101,11 +107,7 @@
     const target_trial = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: function() {
-        // 2. Display the counter and the target word
-        return `
-          <div class="trial-counter">Trials remaining: ${trial_count}</div>
-          <div class="stimulus-text"><strong>${jsPsych.timelineVariable('target')}</strong></div>
-        `;
+        return `<div class="stimulus-text"><strong>${jsPsych.timelineVariable('target')}</strong></div>`;
       },
       choices: ['f', 'j'],
       trial_duration: 3000, 
@@ -113,14 +115,12 @@
       data: {
         task: 'response',
         correct_response: jsPsych.timelineVariable('correct_key'),
-        word_prime: jsPsych.timelineVariable('word_prime'),
-        remaining_trials: function() { return trial_count; } // Log count to data
+        word_prime: jsPsych.timelineVariable('word_prime')
       },
       on_finish: function(data){
         data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
-        // 3. Decrement the counter after the response
-        trial_count--;
-        updateCounter(); // Update immediately so it changes during the post_trial_gap
+        trial_count--; 
+        updateCounter(); // Update immediately so the new number shows during the 1000ms gap
       }
     };
 
