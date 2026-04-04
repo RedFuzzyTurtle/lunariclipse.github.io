@@ -16,14 +16,15 @@
         font-family: monospace;
         letter-spacing: 5px;
       }
-      /* Style for the counter in the corner */
-      .trial-counter {
-        position: absolute;
+      /* Persistent counter styling */
+      #trial-counter-container {
+        position: fixed;
         top: 20px;
         right: 20px;
         font-size: 18px;
         font-family: sans-serif;
         color: #888;
+        z-index: 100; /* Ensures it stays above jsPsych elements */
       }
     </style>
   </head>
@@ -50,7 +51,10 @@
         <p>Press the <strong>'J'</strong> key if the target is a <strong>NON-WORD</strong>.</p>
         <br>
         <p>Press SPACE to begin.</p>
-      `
+      `,
+      on_finish: function() {
+        updateCounter(); // Show counter immediately after instructions
+      }
     };
     timeline.push(instructions);
 
@@ -66,7 +70,10 @@
       type: jsPsychHtmlKeyboardResponse,
       stimulus: '<div class="stimulus-text">+</div>',
       choices: "NO_KEYS",
-      trial_duration: 1000
+      trial_duration: 1000,
+      on_start: function() {
+        updateCounter(); // Ensure it reflects the current state at the start of the trial cycle
+      }
     };
 
     const mask_trial = {
@@ -107,6 +114,7 @@
         data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
         // 3. Decrement the counter after the response
         trial_count--;
+        updateCounter(); // Update immediately so it changes during the post_trial_gap
       }
     };
 
