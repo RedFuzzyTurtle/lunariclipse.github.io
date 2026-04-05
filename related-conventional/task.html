@@ -31,14 +31,21 @@
         border-radius: 4px;
         pointer-events: none; /* Prevents the box from blocking clicks */
       }
+
+      #jspsych-target {
+        width: 100vw;
+        height: 100vh;
+      }
     </style>
   </head>
   <body>
     <div id="trial-counter-container"></div>
-
+    <div id="jspsych-target">
     <script>
       // 1. Initialize jsPsych
-      const jsPsych = initJsPsych();
+      const jsPsych = initJsPsych({
+        display_element: 'jspsych-target'
+      });
 
       // 2. Setup Data Management
       const subject_id = jsPsych.randomization.randomID(10);
@@ -362,5 +369,6 @@
       // Run
       jsPsych.run(timeline);
     </script>
+    </div>
   </body>
 </html>
