@@ -114,7 +114,7 @@
               return `<div class="stimulus-text"><strong>${jsPsych.timelineVariable('target').toLowerCase()}</strong></div>`;
           },
           choices: "NO_KEYS",     
-          trial_duration: 33
+          trial_duration: 3000
       }
 
       // Part C: Prime (50ms)
@@ -137,7 +137,9 @@
         post_trial_gap: 1000, // 1000ms blank screen after response before the next trial starts
         data: {
           task: 'response',
-          correct_response: jsPsych.timelineVariable('correct_key')
+          correct_response: jsPsych.timelineVariable('correct_key'),
+          word_prime: jsPsych.timelineVariable('word_prime'),
+          related: jsPsych.timelineVariable('related')
         },
         on_finish: function(data){
           data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
@@ -152,11 +154,11 @@
         // Added fixation_trial to the beginning of the timeline sequence
         timeline: [fixation_trial, mask_trial, sandwich_target, prime_trial, target_trial],
         timeline_variables: [
-          { prime: 'doctor', target: 'NURSE', correct_key: 'f' },
-          { prime: 'apple', target: 'FLIRB', correct_key: 'j' },
-          { prime: 'bread', target: 'BUTTER', correct_key: 'f' },
-          { prime: 'water', target: 'CHALK', correct_key: 'f' },
-          { prime: 'cloud', target: 'MOKIR', correct_key: 'j' }
+          { prime: 'doctor', target: 'NURSE', correct_key: 'f', word_prime: true, related: true },
+          { prime: 'apple', target: 'FLIRB', correct_key: 'j', word_prime: false, related: false },
+          { prime: 'bread', target: 'BUTTER', correct_key: 'f', word_prime: true, related: true },
+          { prime: 'water', target: 'CHALK', correct_key: 'f', word_prime: true, related: false },
+          { prime: 'cloud', target: 'MOKIR', correct_key: 'j', word_prime: false, related: true }
         ],
         randomize_order: true
       };
